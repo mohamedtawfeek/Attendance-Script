@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+
+        <meta charset="UTF-8">
+        <title>Register</title>
+        <link rel="stylesheet" type="text/css" href="html/css/style.css">
+        <link rel="stylesheet" type="text/css" href="html/css/normalize.css">
+        <link rel="stylesheet" href="html/css/font-awesome.min.css">
+
+    </head>
+    <body>   
+        <div class='button'>
+            <div class='fa fa-bars'></div>
+        </div>
+        <div class='content home'>
+            <h1>Zwaar Attendance</h1>
+            <form action="register.php" method="POST">
+                First name<br> <input id="one" type="text" name="first_name" ><br>
+                Last Name<br> <input id="one" type="text" name="last_name" ><br>
+                Email<br><input id="one" type="text" name="email"><br>
+                Password<br> <input id="one" type="password" name="password"><br>
+
+                Secret answer<br> <input id="one" type="text" name="secret"><br>
+                Male <input type="radio" value="Male" name="gender" checked=""><br>
+                Female<input type="radio" value="female" name="gender" ><br />
+                Shift<br>Day<input type="radio" value="day" name="shift" checked=""><br />
+                Night<input type="radio" value="night" name="shift" ><br />
+                <input type="submit" value="Done.">
+
+            </form>
+        </div>
+        <script src='html/js/jquery-1.11.3.min.js'></script>
+        <script src="html/js/index.js"></script> 
+    </body>
+
