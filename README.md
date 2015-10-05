@@ -3,7 +3,7 @@ this is an attendance script
 
 Setup
 
-on attend/db.php change 'server' to your mysql server
+on attendance/db.php change 'server' to your mysql server
 
 and 'user' to your mysql user 'password'= mysql password 'dbName' = mysql database name
 
