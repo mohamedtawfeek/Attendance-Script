@@ -11,7 +11,7 @@ import database into your database
 
 upload script and it should work. 
 
-admin cpanel user = admin password = admin 
+admin cpanel user = admin    password = admin 
 
 you can change it from table called admin
 
