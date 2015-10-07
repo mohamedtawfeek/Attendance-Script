@@ -208,7 +208,9 @@ window.location = "admin.php"
                             $min_output_attend1 = (60 - filter_input(INPUT_POST, 'new_min')) - (60 - filter_input(INPUT_POST, 'work_min_finish')) - $break_min_output[0];
                             $pattern_this = preg_match("/[0-9]+/", $min_output_attend1, $min_output_attend);
                             $hours_output = $hours - filter_input(INPUT_POST, 'new_hour') - $break_hour_output[0];
-
+                            if ($break_min_1 < 0) {
+                                $hours_output--;
+                            }
 
                             $this->edit_id = filter_input(INPUT_POST, 'edit_num');
                             $this->edit_time = self::getObject()->query("UPDATE `attend` SET `hour`='" . filter_input(INPUT_POST, 'new_hour') . "', "
@@ -223,6 +225,9 @@ window.location = "admin.php"
                             $min_output_attend1 = (60 - filter_input(INPUT_POST, 'new_min')) - (60 - filter_input(INPUT_POST, 'work_min_finish'));
                             $pattern_this = preg_match("/[0-9]+/", $min_output_attend1, $min_output_attend);
                             $hours_output = $hours - filter_input(INPUT_POST, 'new_hour');
+                            if ($min_output_attend1 < 0) {
+                                $hours_output--;
+                            }
                             $this->edit_id = filter_input(INPUT_POST, 'edit_num');
                             $this->edit_time = self::getObject()->query("UPDATE `attend` SET `hour`='" . filter_input(INPUT_POST, 'new_hour') . "', "
                                     . " `min`='" . filter_input(INPUT_POST, 'new_min') . "',`work_hour`='$hours_output',`work_min`='$min_output_attend[0]'"
@@ -335,7 +340,9 @@ window.location = "admin.php"
                                 $min_output_extra1 = (60 - filter_input(INPUT_POST, 'new_min_extra')) - (60 - filter_input(INPUT_POST, 'work_min_finish'));
                                 $pattern_this_extra = preg_match("/[0-9]+/", $min_output_extra1, $min_output_extra);
                                 $hours_output_extra = filter_input(INPUT_POST, 'new_hour_extra') - $hours;
-
+                                if ($min_output_extra1 < 0) {
+                                    $hours_output_extra--;
+                                }
                                 $this->edit_id_2 = filter_input(INPUT_POST, 'edit_num_2');
                                 $this->edit_time_extra = self::getObject()->query("UPDATE `extra` SET `hour`='" . filter_input(INPUT_POST, 'new_hour_extra') . "', "
                                         . " `min`='" . filter_input(INPUT_POST, 'new_min_extra') . "',`work_hour_extra`='$hours_output_extra',`work_min_extra`='$min_output_extra[0]'"
@@ -347,7 +354,9 @@ window.location = "admin.php"
                                 $min_output_extra1 = (60 - filter_input(INPUT_POST, 'new_min_extra')) - (60 - filter_input(INPUT_POST, 'work_min_finish'));
                                 $pattern_this_extra = preg_match("/[0-9]+/", $min_output_extra1, $min_output_extra);
                                 $hours_output_extra = filter_input(INPUT_POST, 'new_hour_extra') - $hours;
-
+                                if ($min_output_extra1 < 0) {
+                                    $hours_output_extra--;
+                                }
                                 $this->edit_id_2 = filter_input(INPUT_POST, 'edit_num_2');
                                 $this->edit_time_extra = self::getObject()->query("UPDATE `extra` SET `hour`='" . filter_input(INPUT_POST, 'new_hour_extra') . "', "
                                         . " `min`='" . filter_input(INPUT_POST, 'new_min_extra') . "',`work_hour_extra`='$hours_output_extra',`work_min_extra`='$min_output_extra[0]'"
