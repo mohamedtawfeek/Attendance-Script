@@ -3,25 +3,14 @@ require_once "db.php";
 
 class homePage extends functionList {
 
-    private $email_cookie;
-    public $date;
-    public $search_name;
-    public $search_show;
-    public $search_result_2;
-
     public function loginHome() {
-
         if (self::check_login()) {
             include_once 'html/home-html.php';
             if (isset($_COOKIE['email'])) {
-                $this->email_cookie = $_COOKIE['email'];
-            }
-            if (isset($_SESSION['email'])) {
-                $this->email_session = $_SESSION['email'];
+                echo 'welcome ' . $_COOKIE['email'];
             }
         } else {
-
-            include 'html/login-html.php';
+            include_once 'html/login-html.php';
         }
         echo '<br>';
 
@@ -48,8 +37,9 @@ class homePage extends functionList {
     }
 
     public function attend() {
-        $this->logininfo();
-        $u_id = $this->loginInfo()['id'];
+        $login = $this->logininfo();
+
+        $u_id = $login['id'];
         $this->found_attend = self::getObject()->query("SELECT * FROM `attend` WHERE `user_id`='$u_id'");
         while ($this->result_attend = $this->found_attend->fetch(PDO::FETCH_ASSOC)) {
 
@@ -62,8 +52,9 @@ class homePage extends functionList {
     }
 
     public function attend_count() {
-        $this->logininfo();
-        $u_id = $this->loginInfo()['id'];
+        $login = $this->logininfo();
+
+        $u_id = $login['id'];
         $late_hour = 0;
         $late_min = 0;
         $count = 0;
@@ -93,8 +84,9 @@ class homePage extends functionList {
     }
 
     public function extra() {
-        $this->logininfo();
-        $u_id = $this->loginInfo()['id'];
+        $login = $this->logininfo();
+
+        $u_id = $login['id'];
 
         $this->found_extra = self::getObject()->query("SELECT * FROM `extra` WHERE `user_id`='$u_id'");
 
@@ -110,8 +102,9 @@ class homePage extends functionList {
     }
 
     public function extra_count() {
-        $this->logininfo();
-        $u_id = $this->loginInfo()['id'];
+        $login = $this->logininfo();
+
+        $u_id = $login['id'];
         $count = 0;
         $count_min = 0;
         $this->found_extra = self::getObject()->query("SELECT * FROM `extra` WHERE `user_id`='$u_id'");
@@ -133,37 +126,41 @@ class homePage extends functionList {
     }
 
     public function loginTime() {
-        $this->logininfo();
+        $login = $this->logininfo();
+
+        $u_id = $login['id'];
         $date = date("Y-m-d");
 
-        $this->found2 = self::getObject()->query("SELECT * FROM `extra` WHERE `user_id`='" . $this->logininfo()['id'] . "' AND "
+        $this->found2 = self::getObject()->query("SELECT * FROM `extra` WHERE `user_id`='" . $u_id . "' AND "
                 . "`date`='" . $date . "'");
         $this->result2 = $this->found2->fetch(PDO::FETCH_ASSOC);
         return $this->result2;
     }
 
     public function loginTime2() {
-        $this->logininfo();
+        $login = $this->logininfo();
+
+        $u_id = $login['id'];
         $date = date("Y-m-d");
-        $this->found3 = self::getObject()->query("SELECT * FROM `attend` WHERE `user_id`='" . $this->logininfo()['id'] . "' AND "
+        $this->found3 = self::getObject()->query("SELECT * FROM `attend` WHERE `user_id`='" . $u_id . "' AND "
                 . "`date`='" . $date . "'");
         $this->result3 = $this->found3->fetch(PDO::FETCH_ASSOC);
         return $this->result3;
     }
 
     public function login_done() {
-        $this->loginTime2();
-        $this->loginTime();
+        $login_time = $this->loginTime2();
+        $login_time2 = $this->loginTime();
 
-        $this->logininfo();
+        $login = $this->logininfo();
         if (self::check_login()) {
             if (filter_input(INPUT_GET, 'logout') == 'logout') {
                 date_default_timezone_set("Egypt");
 
-                $hours_attend = $this->loginTime2()['hour'];
-                $min_attend = $this->loginTime2()['min'];
-                $hours_extra = $this->loginTime()['hour'];
-                $min_extra = $this->loginTime()['min'];
+                $hours_attend = $login_time['hour'];
+                $min_attend = $login_time['min'];
+                $hours_extra = $login_time2['hour'];
+                $min_extra = $login_time2['min'];
                 $logout_time = date('H');
                 $logout_hour = date('h');
 
@@ -178,47 +175,61 @@ class homePage extends functionList {
                 $pattern_this1 = preg_match("/[0-9]+/", $min_output_extra1, $min_output_extra);
                 $day = date('l');
                 $time = date('H');
-                $user_id = $this->loginInfo()['id'];
+                $user_id = $login['id'];
 
-                if ($this->logininfo()['shift'] === 'day' || $this->logininfo()['shift'] === 'dayoff') {
+                if ($login['shift'] === 'day' || $login['shift'] === 'dayoff') {
                     if ($time === '10' || $time === '11' || $time === '12' || $time === '13' || $time === '14' || $time === '15' || $time === '16' || $time === '17' || $time === '18') {
                         self::getObject()->query("UPDATE attend SET work_hour= '$hours_output_attend',work_min= '$min_output_attend[0]',work_hour_finish='$logout_hour',work_min_finish='$logout_min' "
                                 . "WHERE user_id='$user_id' AND `date`='$date'");
                     }
-                }if ($this->logininfo()['shift'] === 'day' || $this->logininfo()['shift'] === 'dayoff') {
+                }if ($login['shift'] === 'day' || $login['shift'] === 'dayoff') {
                     if ($time === '19' || $time === '20' || $time === '21' || $time === '22' || $time === '23') {
                         self::getObject()->query("UPDATE extra SET work_hour_extra= '$hours_output_extra',work_min_extra= '$min_output_extra[0]',finish_hour_extra='$logout_hour',finish_min_extra='$logout_min' "
                                 . "WHERE user_id='$user_id' AND `date`='$date'");
                     }
-                }if ($this->logininfo()['shift'] === 'day' || $this->logininfo()['shift'] === 'dayoff' || $this->logininfo()['shift'] === 'night') {
+                }if ($login['shift'] === 'day' || $login['shift'] === 'dayoff' || $login['shift'] === 'night') {
                     if ($time === '00' || $time === '01' || $time === '02' || $time === '03' || $time === '04' || $time === '05' || $time === '06' || $time === '07' || $time === '08' || $time === '09') {
                         self::getObject()->query("UPDATE extra SET work_hour_extra= '$hours_output_extra',work_min_extra= '$min_output_extra[0]',finish_hour_extra='$logout_hour',finish_min_extra='$logout_min' "
                                 . "WHERE user_id='$user_id' AND `date`='$date'");
                     }
-                } if ($this->logininfo()['shift'] === 'night') {
+                } if ($login['shift'] === 'night') {
                     self::getObject()->query("UPDATE `attend` SET `work_hour`='$hours_output_attend',`work_min`='$min_output_attend[0]',work_hour_finish='$logout_hour',work_min_finish='$logout_min' "
                             . "WHERE `user_id`='$user_id' AND `date`='$date'");
                 }
             }
 
             if (filter_input(INPUT_POST, 'break_hours') || filter_input(INPUT_POST, 'break_min')) {
-                $hours_attend = $this->loginTime2()['work_hour'];
-                $min_attend = $this->loginTime2()['work_min'];
-                $hours_extra = $this->loginTime()['work_hour_extra'];
-                $min_extra = $this->loginTime()['work_min_extra'];
+                $hours_attend = $login_time['work_hour'];
+                $min_attend = $login_time['work_min'];
+                $hours_extra = $login_time2['work_hour_extra'];
+                $min_extra = $login_time2['work_min_extra'];
                 $time = date('H');
-                $break_hour_attend = $hours_attend - filter_input(INPUT_POST, 'break_hours');
+                if (filter_input(INPUT_POST, 'break_hours') == -1) {
+                    $break_hour_attend = $hours_attend + 1;
+                    $break_time_db = "no break";
+                } elseif (filter_input(INPUT_POST, 'break_hours') == 0) {
+                    $break_time_db = "2hours";
+                } else {
+                    $break_hour_attend = $hours_attend - filter_input(INPUT_POST, 'break_hours');
+                    $break_time_db = "3hours";
+                }
                 $break_min_attend = $min_attend - filter_input(INPUT_POST, 'break_min');
                 $break_hour_extra = $hours_extra - filter_input(INPUT_POST, 'break_hours');
                 $break_min_extra = $min_extra - filter_input(INPUT_POST, 'break_min');
-                $user_id = $this->loginInfo()['id'];
+                $user_id = $login['id'];
                 $date = date("Y-m-d");
-
-                if ($time === '14' || $time === '15' || $time === '16') {
-                    self::getObject()->query("UPDATE `attend` SET `work_hour`='$break_hour_attend',`work_min`='$break_min_attend',break_hour='" . filter_input(INPUT_POST, 'break_hours') . "',break_min='" . filter_input(INPUT_POST, 'break_min') . "' "
-                            . "WHERE `user_id`='$user_id' AND `date`='$date'");
+                if ($login_time['break_hour'] === "2hour" || $login_time['break_hour'] === "2hours" || $login_time['break_hour'] === "3hours") {
+                    echo 'you took a break before';
                 } else {
-                    echo 'sorry you cannot take break at this hour break from 2~5';
+                    if ($time === '14' || $time === '15' || $time === '16') {
+                        self::getObject()->query("UPDATE `attend` SET `work_hour`='$break_hour_attend',`work_min`='$break_min_attend',break_hour='$break_time_db',break_min='" . filter_input(INPUT_POST, 'break_min') . "' "
+                                . "WHERE `user_id`='$user_id' AND `date`='$date'");
+                    } elseif ($break_time_db === "no break" && $login_time['break_hour'] === "1") {
+                        self::getObject()->query("UPDATE `attend` SET `work_hour`='$break_hour_attend',`work_min`='$break_min_attend',break_hour='$break_time_db',break_min='" . filter_input(INPUT_POST, 'break_min') . "' "
+                                . "WHERE `user_id`='$user_id' AND `date`='$date'");
+                    } else {
+                        echo 'sorry you cannot take break at this hour break from 2~5';
+                    }
                 }
                 /* if ($time === '14' || $time === '15' || $time === '16' || $time === '17') {
                   self::getObject()->query("UPDATE `attend` SET `work_hour`='$break_hour_attend',`work_min`='$break_min_attend',break_hour='" . filter_input(INPUT_POST, 'break_hours') . "',break_min='" . filter_input(INPUT_POST, 'break_min') . "' "
@@ -264,9 +275,8 @@ class homePage extends functionList {
 $grabber = new functionList;
 $home = new homePage();
 $home->loginHome();
+
 if ($grabber->check_login()) {
-
-
     $home->login_done();
     ?>
     <h2>Normal Attend</h2>
@@ -293,7 +303,7 @@ if ($grabber->check_login()) {
                 <th>Attend</th>
                 <th>Break</th>
                 <th>Finish Time</th>
-                <th>Statue</th>
+                <th>Status</th>
 
             </tr>
             <?php
@@ -301,5 +311,7 @@ if ($grabber->check_login()) {
             echo '</table>';
             $home->extra_count();
         }
+        ?>
+
 
         

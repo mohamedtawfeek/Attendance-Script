@@ -31,15 +31,15 @@ class adminHome extends functionList {
                 echo $this->users_result['email'] . '<br>';
                 ?>
 
-                <form action = "admin.php" method = "POST">
-                    <input type="submit" value="delete" name="delete">
+                <form action = "admin.php" method = "POST" onsubmit="accept_delete()">
+                    <input type="submit" value="delete" name="delete" >
 
                     <input type="hidden" value="<?php echo $this->users_result['id'] ?>" name="delete_id">
-                    <input type="submit" value="edit" name="edit">
+                    <input type="submit" value="edit" name="edit<?php echo $this->users_result['id'] ?>">
                     <input type="hidden" value="<?php echo $this->users_result['id'] ?>" name="edit_id_num">
                 </form>
                 <?php
-                if (filter_input(INPUT_POST, 'edit')) {
+                if (isset($_POST['edit' . $this->users_result['id']])) {
                     ?>
 
                     <form action = "admin.php" method = "POST">
@@ -47,7 +47,7 @@ class adminHome extends functionList {
                         <br>Last Name <br><input type = "text" name = "new_last" value = "<?php echo $this->users_result['last_name']; ?>" >
                         <br>Secret Answer <br><input type = "text" name = "new_secret" value ="<?php echo $this->users_result['secret_answer']; ?>">
                         <br>email <br><input type = "text" name = "new_email" value = "<?php echo $this->users_result['email']; ?>" >
-                        <br>password<br><input type = "text" name = "new_password" value = "<?php echo md5($this->users_result['password']) ?>">
+                        <br>password<br><input type = "text" name = "new_password" placeholder="new password">
                         <input type = "hidden" value = "<?php echo $this->users_result['id'] ?>" name = "edit_id_num<?php echo $this->users_result['id'] ?>">
                         <br><br><input type = "submit" value = "submit" name = "edit_done">
                     </form>
@@ -102,7 +102,7 @@ window.location = "admin.php"
                         <th>Break</th>
                         <th>Finish Time</th>
                         <th>Work hours</th>
-                        <th>Statue</th>
+                        <th>Status</th>
 
                         <th>Edit</th>
 
@@ -147,10 +147,10 @@ window.location = "admin.php"
                         echo '<td>' . $this->time_result['work_hour'] . ':' . $this->time_result['work_min'] . '</td>';
                         echo '<td>' . $this->time_result['statue'] . '</td>';
 
-                        echo '<form action="admin.php" method="POST">';
-                        echo '<td><input style="color:#000;" type="submit" value="delete" name="delete_this" class="delete_btn">';
+                        echo '<form action="admin.php" method="POST" onsubmit="accept_delete()">';
+                        echo '<td><input style="color:#000;" type="submit" value="delete" name="delete_this" class="delete_btn" >';
                         if ($this->time_result['statue'] === 'pending') {
-                            echo '<input style="color:#000;"type="submit" value="Accept" name="accept_time">';
+                            echo '<input style="color:#000;"type="submit" value="Accept" name="accept_time" >';
                         }
                         echo '<input style="color:#000;"type="submit" value="Edit" name="edit_title' . $this->time_result['id'] . '" class="edit_btn"></td>';
 
@@ -177,8 +177,8 @@ window.location = "admin.php"
     window.location = "admin.php"
 </script>';
                         }
-                        if (isset($_POST['edit_title' . $this->time_result['id'] . ''])) {
-                            echo '<form action="admin.php" method="POST">';
+                        if (isset($_POST['edit_title' . $this->time_result['id']])) {
+                            echo '<form action="admin.php" method="POST" onsubmit="accept_delete()">';
                             echo '<input type="hidden" value="' . $this->time_result['id'] . '" name="edit_num">';
                             echo '<input type="hidden" value="' . $this->time_result['shift'] . '" name="edit_shift">';
                             echo '<input type="hidden" value="' . $this->time_result['break_hour'] . '" name="break_hour_1">';
@@ -217,7 +217,7 @@ window.location = "admin.php"
                                     . " `min`='" . filter_input(INPUT_POST, 'new_min') . "',`work_hour`='$hours_output',`work_min`='$min_output_attend[0]'"
                                     . ",`break_hour`='" . filter_input(INPUT_POST, 'break_hour') . "',`break_min`='" . filter_input(INPUT_POST, 'break_min') . "'"
                                     . " WHERE `id`='" . $this->edit_id . "'");
-                            header('Location: http://elberbawy.byethost22.com/admin.php');
+                            header('Location:http://localhost/attendance/admin.php');
                         }
 
                         if (isset($_POST['new_hour']) && isset($_POST['new_min']) && isset($_POST['work_hour_finish']) && isset($_POST['work_min_finish']) && filter_input(INPUT_POST, 'edit_shift') === 'night') {
@@ -232,7 +232,7 @@ window.location = "admin.php"
                             $this->edit_time = self::getObject()->query("UPDATE `attend` SET `hour`='" . filter_input(INPUT_POST, 'new_hour') . "', "
                                     . " `min`='" . filter_input(INPUT_POST, 'new_min') . "',`work_hour`='$hours_output',`work_min`='$min_output_attend[0]'"
                                     . " WHERE `id`='" . $this->edit_id . "' AND `shift`='night'");
-                            header('Location: http://elberbawy.byethost22.com/admin.php');
+                            header('Location:http://localhost/attendance/admin.php');
                         }
                     }
                     echo '</table>';
@@ -286,10 +286,10 @@ window.location = "admin.php"
                             echo '<td>' . $this->extra_result['work_hour_extra'] . ':' . $this->extra_result['work_min_extra'] . '</td>';
                             echo '<td>' . $this->extra_result['statue'] . '</td>';
 
-                            echo '<form action="admin.php" method="POST">';
-                            echo '<td><input style="color:#000;" type="submit" value="delete" name="delete_extra" class="delete_btn">';
+                            echo '<form action="admin.php" method="POST" onsubmit="accept_delete()">';
+                            echo '<td><input style="color:#000;" type="submit" value="delete" name="delete_extra" class="delete_btn" >';
                             if ($this->extra_result['statue'] === 'pending') {
-                                echo '<input style="color:#000;"type="submit" value="Accept" name="accept_extra">';
+                                echo '<input style="color:#000;"type="submit" value="Accept" name="accept_extra" >';
                             }
                             echo '<input style="color:#000;"type="submit" value="Edit" name="edit_title' . $this->extra_result['id'] . '" class="edit_btn"></td>';
 
@@ -317,7 +317,7 @@ window.location = "admin.php"
 </script>';
                             }
                             if (isset($_POST['edit_title' . $this->extra_result['id'] . ''])) {
-                                echo '<form action="admin.php" method="POST">';
+                                echo '<form action="admin.php" method="POST" onsubmit="accept_delete()">';
                                 echo '<input type="hidden" value="' . $this->extra_result['id'] . '" name="edit_num_2">';
                                 echo '<input type="hidden" value="' . $this->extra_result['shift'] . '" name="edit_shift_2">';
 
@@ -347,7 +347,7 @@ window.location = "admin.php"
                                 $this->edit_time_extra = self::getObject()->query("UPDATE `extra` SET `hour`='" . filter_input(INPUT_POST, 'new_hour_extra') . "', "
                                         . " `min`='" . filter_input(INPUT_POST, 'new_min_extra') . "',`work_hour_extra`='$hours_output_extra',`work_min_extra`='$min_output_extra[0]'"
                                         . " WHERE `id`='" . $this->edit_id_2 . "'");
-                                header('Location: http://elberbawy.byethost22.com/admin.php');
+                                header('Location:http://localhost/attendance/admin.php');
                             }
                             if (isset($_POST['new_hour_extra']) && isset($_POST['new_min_extra']) && isset($_POST['finish_hour_extra']) && isset($_POST['finish_min_extra']) && filter_input(INPUT_POST, 'edit_shift_2') === 'day' || filter_input(INPUT_POST, 'edit_shift') === 'dayoff') {
                                 $hours = filter_input(INPUT_POST, 'finish_hour_extra');
@@ -361,7 +361,7 @@ window.location = "admin.php"
                                 $this->edit_time_extra = self::getObject()->query("UPDATE `extra` SET `hour`='" . filter_input(INPUT_POST, 'new_hour_extra') . "', "
                                         . " `min`='" . filter_input(INPUT_POST, 'new_min_extra') . "',`work_hour_extra`='$hours_output_extra',`work_min_extra`='$min_output_extra[0]'"
                                         . " WHERE `id`='" . $this->edit_id_2 . "'");
-                                header('Location: http://elberbawy.byethost22.com/admin.php');
+                                header('Location:http://localhost/attendance/admin.php');
                             }
                         }
                         echo '</table>';
@@ -373,14 +373,13 @@ window.location = "admin.php"
 
         $grabber = new functionList;
         if ($grabber->check_login2()) {
-
             include_once 'html/admin-html.php';
-
             $new_admin = new adminHome;
-
-
             $new_admin->deleteUsers();
             $new_admin->deletePosts();
+            echo '<script>    function accept_delete() {
+        confirm("Are you sure?");
+    }</script>';
         } else {
             include_once 'html/admin-htlogin.php';
         }

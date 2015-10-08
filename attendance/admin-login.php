@@ -1,6 +1,6 @@
 <?php
 
-require_once ('db.php');
+require_once 'db.php';
 
 class adminPanel extends functionList {
     public  $logged_2;
@@ -14,8 +14,9 @@ class adminPanel extends functionList {
         $this->user = filter_input(INPUT_POST, 'user');
         $this->password_2 = filter_input(INPUT_POST, 'password_2', FILTER_SANITIZE_SPECIAL_CHARS);
         $this->found = self::getObject()->query("SELECT * FROM `admin` WHERE `user`='" . filter_input(INPUT_POST, 'user') . "' AND "
-                . "`password`='" . filter_input(INPUT_POST, 'password_2', FILTER_SANITIZE_SPECIAL_CHARS) . "'");
+                . "`password`='" . $this->password_2 . "'");
         $this->result = $this->found->fetch(PDO::FETCH_ASSOC);
+        
     }
 
     public function checkLogin2() {
@@ -36,10 +37,7 @@ $check = new adminPanel;
 
 $check->checkLogin2();
 if ($check->logged_2 == false) {
-
     include ('html/admin-htlogin.php');
-    
-    
 }
 
 if ($check->logged_2 == TRUE) {

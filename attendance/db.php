@@ -54,20 +54,13 @@ class functionList {
     public function check_login() {
 
         $this->startSession();
-        $this->email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $this->email_cookie = filter_input(INPUT_COOKIE, 'email', FILTER_VALIDATE_EMAIL);
         $this->password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if ($this->email) {
-            $this->info_email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-            $this->info_password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
-        } else if ($this->email_cookie) {
+        if ($this->email_cookie) {
             $this->info_email = filter_input(INPUT_COOKIE, 'email', FILTER_VALIDATE_EMAIL);
             $this->info_password = filter_input(INPUT_COOKIE, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
-        } else if (isset($_SESSION['email'])) {
-            $this->info_email = $_SESSION['email'];
-            $this->info_password = $_SESSION['password'];
-        }
+        } 
 
 
 
@@ -86,9 +79,9 @@ class functionList {
 
 
         return self::getObject()->query("SELECT * FROM `users` WHERE `email`='$email' "
-                        . "AND `password`='$password' ");
+                        . "AND `password`='$password'");
     }
-       
+
     public function startSession2() {
 
         if (!isset($_SESSION)) {
@@ -98,15 +91,15 @@ class functionList {
 
     public function check_login2() {
         $this->startSession2();
-        
+
         $this->user = filter_input(INPUT_POST, 'user');
-        
+
         $this->password_2 = filter_input(INPUT_POST, 'password_2', FILTER_SANITIZE_SPECIAL_CHARS);
 
         if ($this->user) {
             $_SESSION['user'] = $this->info_user = filter_input(INPUT_POST, 'user');
             $_SESSION['password_2'] = $this->info_password_2 = filter_input(INPUT_POST, 'password_2', FILTER_SANITIZE_SPECIAL_CHARS);
-        }  else if (isset($_SESSION['user'])) {
+        } else if (isset($_SESSION['user'])) {
             $this->info_user = $_SESSION['user'];
             $this->info_password_2 = $_SESSION['password_2'];
         }
@@ -115,7 +108,7 @@ class functionList {
 
         if (isset($this->info_user) && isset($this->info_password_2)) {
             $this->user = $this->info_user;
-            $this->password_2 = $this->info_password_2;
+            $this->password_2 = md5($this->info_password_2);
 
 
             return $this->user_info_2 = $this->grab_user_account2($this->user, $this->password_2);

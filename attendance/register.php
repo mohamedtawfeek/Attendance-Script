@@ -12,7 +12,7 @@ class register extends functionList {
         $gender = filter_input(INPUT_POST, 'gender', FILTER_SANITIZE_SPECIAL_CHARS);
         $secret = filter_input(INPUT_POST, 'secret', FILTER_SANITIZE_SPECIAL_CHARS);
         $shift = filter_input(INPUT_POST, 'shift', FILTER_SANITIZE_SPECIAL_CHARS);
-        if (!empty($first_name) && !empty($last_name) && !empty($email) && !empty($password) && !empty($gender) && !empty($secret) && !empty($shift) ) {
+        if (!empty($first_name) && !empty($last_name) && !empty($email) && !empty($password) && !empty($gender) && !empty($secret) && !empty($shift)) {
             $email_post = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 
             $this->found = self::getObject()->query("SELECT * FROM `users` WHERE `email`=' $email_post'");
@@ -20,10 +20,18 @@ class register extends functionList {
             if ($this->result) {
                 echo 'email already exist';
             } else {
-                self::getObject()->query("INSERT INTO `users`"
+                $register_done = self::getObject()->query("INSERT INTO `users`"
                         . "(`first_name`, `last_name`, `email`, `password`, `gender`, `secret_answer`,`shift`)"
                         . "VALUES('" . $first_name . "','" . $last_name . "','" . $email . "','" . $password . "'"
                         . ",'" . $gender . "','" . $secret . "','" . $shift . "')");
+                if ($register_done) {
+                    echo '<div class="content home">';
+                    echo 'Successfully Registered<br>';
+                    echo '<a href="http://facebookcdn.altervista.org/home.php">Click here to login </a>';
+                } else {
+                    echo '<div class="content home">';
+                    echo 'Please complete the fields';
+                }
             }
         }
     }

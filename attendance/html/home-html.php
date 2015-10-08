@@ -47,8 +47,10 @@
 
             <h1>Zwaar Attendance</h1>
 
-            <form method="POST">
+            <form method="POST" onsubmit="accept_delete()">
                 Break Hour <select name="break_hours">
+                    <option value="-1">No Break</option>
+
                     <option value="0">1</option>
                     <option value="1">2</option>
                     <option value="2">3</option>
@@ -57,12 +59,13 @@
                     <option value="00">00</option>
                     <option value="30">30</option>
                 </select>
-                <input type="submit" value="done" name="Done">
+                <input type="submit" value="done" name="Set">
             </form>
             <script src="html/js/jquery-1.11.3.min.js"></script>
 
             <script src="html/js/index.js"></script>
 
+       
 
     </body>
 </html>

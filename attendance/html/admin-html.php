@@ -18,7 +18,6 @@
             <script src="html/js/jquery-1.11.3.min.js"></script>
 
             <script src="html/js/index.js"></script>
-            <script src="html/js/main.js"></script>
 
     </body>
 </html>

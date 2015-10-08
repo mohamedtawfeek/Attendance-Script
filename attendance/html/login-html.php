@@ -10,24 +10,7 @@
         <link rel="stylesheet" href="html/css/font-awesome.min.css">
 
     </head>
-    <body>
-        <div class='button'>
-            <div class='fa fa-bars'></div>
-        </div>
-        <div class='menu'>
-            <nav>
-                <ul>
-                    <li>
-                        <a href='register.php'>Register</a>
-                    </li>
-                    <li>
-                        <a href='forget.php'>Forget Password?</a>
-                    </li>
 
-
-                </ul>
-            </nav>
-        </div>
     <center>
         <div class='content home'>
             <h1>Zwaar Attendance</h1>

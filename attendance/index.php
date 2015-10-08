@@ -1,3 +1,3 @@
 <?php
-header('Location: http://localhost/attend/home.php')
+header('Location: http://localhost/attendance/home.php')
 ?>
