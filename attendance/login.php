@@ -184,7 +184,7 @@ class loginPage extends functionList {
                         $date = date("Y-m-d");
                         $hours_db = date('H');
                         $hours_attend = date('h');
-
+                        
                         $min_db = date('i');
                         setcookie("email", filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL), $exp);
                         setcookie("password", md5(filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS)), $exp);
